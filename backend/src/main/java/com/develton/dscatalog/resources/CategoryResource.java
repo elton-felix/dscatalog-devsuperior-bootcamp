@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.develton.dscatalog.entities.Category;
+import com.develton.dscatalog.dto.CategoryDTO;
 import com.develton.dscatalog.services.CategoryService;
 
 //o resource ele implementa o controlador rest
@@ -23,8 +23,8 @@ public class CategoryResource {
 	//objeto do spring que irá encapsular uma resposta http
 	//colocamos o tipo dos dados do corpo do metodo entre <>
 	@GetMapping //configurando que esse metodo é um webservice / endpoint
-	public ResponseEntity<List<Category>> findAll(){
-		List<Category> list = service.findAll();
+	public ResponseEntity<List<CategoryDTO>> findAll(){
+		List<CategoryDTO> list = service.findAll();
 		
 		return ResponseEntity.ok().body(list);//o ok fala que a resposta é 200 que significa que a requisição foi realizada com sucesso
 	}

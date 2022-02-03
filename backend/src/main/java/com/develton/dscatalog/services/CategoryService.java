@@ -43,4 +43,13 @@ public class CategoryService {
 		//o metodo tenta acessar a category se a entidade não existir , retorna a exeção
 		return new CategoryDTO(entity); //retornando o objeto mudando o tipo de category para dto
 	}
+
+	@Transactional(readOnly = true)
+	public CategoryDTO insert(CategoryDTO dto) {
+		Category entity = new Category();
+		entity.setName(dto.getName());
+		entity = repository.save(entity);//save salva a nova entidade e retorno a referencia dela
+		
+		return new CategoryDTO(entity);
+	}
 }

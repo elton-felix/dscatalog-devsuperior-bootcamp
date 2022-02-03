@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.develton.dscatalog.dto.CategoryDTO;
 import com.develton.dscatalog.entities.Category;
 import com.develton.dscatalog.repositories.CategoryRepository;
+import com.develton.dscatalog.services.exeptions.EntityNotFoundException;
 
 @Service //definindo que essa classe é de serviço
 		//gerencia as instancias de dependencias do spring
@@ -36,8 +37,10 @@ public class CategoryService {
 	public CategoryDTO findById(Long id) {
 		//o retorno do findById é um tipo optional
 		Optional<Category> obj = repository.findById(id);
-		Category entity = obj.get(); // o get obtem aquilo que está dentro do optional , nesse caso a entidade
-	
+		//Category entity = obj.get(); // o get obtem aquilo que está dentro do optional , nesse caso a entidade
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+		//orelseThrow nos permite definir uma chamada de exceção 
+		//o metodo tenta acessar a category se a entidade não existir , retorna a exeção
 		return new CategoryDTO(entity); //retornando o objeto mudando o tipo de category para dto
 	}
 }

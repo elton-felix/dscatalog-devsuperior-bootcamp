@@ -1,6 +1,7 @@
 package com.develton.dscatalog.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,14 @@ public class CategoryService {
 		List<CategoryDTO> listDTO = list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList()); // collectors tranforma de string pra lista
 		
 		return listDTO;
+	}
+	
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id) {
+		//o retorno do findById é um tipo optional
+		Optional<Category> obj = repository.findById(id);
+		Category entity = obj.get(); // o get obtem aquilo que está dentro do optional , nesse caso a entidade
+	
+		return new CategoryDTO(entity); //retornando o objeto mudando o tipo de category para dto
 	}
 }

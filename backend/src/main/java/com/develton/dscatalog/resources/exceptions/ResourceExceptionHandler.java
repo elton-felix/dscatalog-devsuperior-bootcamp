@@ -9,14 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.develton.dscatalog.services.exeptions.EntityNotFoundException;
+import com.develton.dscatalog.services.exeptions.ResourceNotFoundException;
 
 @ControllerAdvice //permite que essa classe intercepte alguma inserção na camada de resouce
 //e faz o seu tratamento
 public class ResourceExceptionHandler {
 	
-	@ExceptionHandler(EntityNotFoundException.class)//passamos o nome da excepção para q ele saiba o tipo de exceção que ira ser interceptada
-	public ResponseEntity<StandardError> entityNotFounder(EntityNotFoundException e, HttpServletRequest request){
+	@ExceptionHandler(ResourceNotFoundException.class)//passamos o nome da excepção para q ele saiba o tipo de exceção que ira ser interceptada
+	public ResponseEntity<StandardError> entityNotFounder(ResourceNotFoundException e, HttpServletRequest request){
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());//now do Instant pega o horario atual
 		err.setStatus(HttpStatus.NOT_FOUND.value());//passando o erro 404 e pegando o numero inteiro dele com o value

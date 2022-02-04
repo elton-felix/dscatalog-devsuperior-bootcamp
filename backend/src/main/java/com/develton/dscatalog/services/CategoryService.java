@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.develton.dscatalog.dto.CategoryDTO;
 import com.develton.dscatalog.entities.Category;
 import com.develton.dscatalog.repositories.CategoryRepository;
-import com.develton.dscatalog.services.exeptions.EntityNotFoundException;
+import com.develton.dscatalog.services.exeptions.ResourceNotFoundException;
 
 @Service //definindo que essa classe é de serviço
 		//gerencia as instancias de dependencias do spring
@@ -38,7 +40,7 @@ public class CategoryService {
 		//o retorno do findById é um tipo optional
 		Optional<Category> obj = repository.findById(id);
 		//Category entity = obj.get(); // o get obtem aquilo que está dentro do optional , nesse caso a entidade
-		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		//orelseThrow nos permite definir uma chamada de exceção 
 		//o metodo tenta acessar a category se a entidade não existir , retorna a exeção
 		return new CategoryDTO(entity); //retornando o objeto mudando o tipo de category para dto
@@ -52,4 +54,23 @@ public class CategoryService {
 		
 		return new CategoryDTO(entity);
 	}
+	
+	@Transactional
+	public CategoryDTO update(Long id, CategoryDTO dto) {
+		try {
+		Category entity = repository.getOne(id);
+		entity.setName(dto.getName());
+		entity = repository.save(entity);
+		return new CategoryDTO(entity);
+		
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found "+ id);
+		}
+	}
 }
+
+//o One se diferencia do findById
+//o byId ele vai até o banco e tras o objeto que procuramos
+//o One não toca no banco , ele instancia um obj provisorio com os dados e o id do obj
+//quando mandarmos salvar é que ele vai no banco de dados

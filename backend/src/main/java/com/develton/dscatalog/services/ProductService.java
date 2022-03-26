@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +34,8 @@ public class ProductService {
 	
 	@Transactional(readOnly = true) //define que esse metodo esteja envolvido numa transação com o banco, para garantirmos a integridade da transação
 	//readOnly=true melhora a performace do BD , para que ele não fique travado só pra leitura
-	public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
-		Page<Product> list =  repository.findAll(pageRequest);
+	public Page<ProductDTO> findAllPaged(Pageable pageable){
+		Page<Product> list =  repository.findAll(pageable);
 		
 		//pegando cada elemento do list e aplicando a função lambda contida na função map(map aplica uma função a cada elemento da lista original)
 		//ou seja a função transforma o elemento x em categoryDTO
